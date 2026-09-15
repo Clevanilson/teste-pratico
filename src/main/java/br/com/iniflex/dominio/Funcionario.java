@@ -1,9 +1,7 @@
 package br.com.iniflex.dominio;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.Locale;
 
 public class Funcionario extends Pessoa {
     private BigDecimal salario;
@@ -15,11 +13,8 @@ public class Funcionario extends Pessoa {
         setFuncao(funcao);
     }
 
-    public String getSalario() {
-        NumberFormat formatador = NumberFormat.getNumberInstance(new Locale("pt", "BR"));
-        formatador.setMinimumFractionDigits(2);
-        formatador.setMaximumFractionDigits(2);
-        return formatador.format(salario);
+    public BigDecimal getSalario() {
+        return salario;
     }
 
     public void setSalario(BigDecimal salario) {

@@ -1,7 +1,6 @@
 package br.com.iniflex.dominio;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public abstract class Pessoa {
     private String nome;
@@ -16,18 +15,18 @@ public abstract class Pessoa {
         return nome;
     }
 
-    private void setNome(String nome) {
+    public void setNome(String nome) {
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
         this.nome = nome.trim();
     }
 
-    public String getDataNascimento() {
-        return dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    private void setDataNascimento(LocalDate dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         if (dataNascimento == null) {
             throw new IllegalArgumentException("Data de nascimento não pode ser nula");
         }

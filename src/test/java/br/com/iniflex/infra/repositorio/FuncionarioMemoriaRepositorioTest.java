@@ -84,7 +84,7 @@ class FuncionarioMemoriaRepositorioTest {
         assertEquals(2, funcionarios.size());
         Funcionario encontrada = funcionarios.get(0);
         assertEquals("Maria", encontrada.getNome());
-        assertEquals("2.210,38", encontrada.getSalario());
+        assertEquals(new BigDecimal("2210.38"), encontrada.getSalario());
         assertEquals("Gerente", encontrada.getFuncao());
         Map<String, List<Funcionario>> porFuncao = repositorio.listarPorFuncao();
         assertFalse(porFuncao.containsKey("Operador") && porFuncao.get("Operador").stream()

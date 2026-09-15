@@ -18,8 +18,8 @@ class FuncionarioTest {
     void comDadosValidos() {
         Funcionario funcionario = new Funcionario(NOME, DATA_NASCIMENTO, SALARIO, FUNCAO);
         assertEquals(funcionario.getNome(), NOME);
-        assertEquals(funcionario.getDataNascimento(), "18/10/2000");
-        assertEquals(funcionario.getSalario(), "2.009,44");
+        assertEquals(DATA_NASCIMENTO, funcionario.getDataNascimento());
+        assertEquals(SALARIO, funcionario.getSalario());
         assertEquals(funcionario.getFuncao(), FUNCAO);
     }
 
