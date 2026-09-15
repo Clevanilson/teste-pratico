@@ -1,0 +1,15 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    command: ["java", "-jar", "app.jar"]
+
+  test:
+    profiles: ["test"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build
+    command: ["mvn", "test"]
