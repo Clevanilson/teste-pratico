@@ -3,8 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: app
-    command: ["java", "-jar", "app.jar"]
+      target: build
+    volumes:
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+    command: ["sh", "-c", "mvn -q -DskipTests package && java -jar target/teste-pratico-1.0.0.jar"]
 
   test:
     profiles: ["test"]
@@ -12,4 +15,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: build
-    command: ["mvn", "test"]
+    volumes:
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+    command: ["mvn", "clean", "test"]

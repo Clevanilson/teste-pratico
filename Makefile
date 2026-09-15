@@ -8,4 +8,4 @@ run:
 	docker compose up --build --abort-on-container-exit app
 
 test:
-	docker compose --profile test run --rm test
+	docker compose --profile test run --build --rm test
