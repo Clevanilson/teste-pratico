@@ -1,0 +1,50 @@
+package br.com.iniflex.aplicacao.views;
+
+import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
+import br.com.iniflex.aplicacao.servico.Logger;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+public class FuncionarioView {
+    private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    private final Logger logger;
+    private final DecimalFormat formatoSalario;
+
+    public FuncionarioView(Logger logger) {
+        this.logger = logger;
+        this.formatoSalario = criarFormatoSalario();
+    }
+
+    public void exibir(CadastrarFuncionario.Output funcionario) {
+        if (funcionario == null) {
+            throw new IllegalArgumentException("Funcionário não pode ser nulo");
+        }
+        logger.log(
+                "%s | %s | %s | %s%n",
+                funcionario.nome(),
+                funcionario.dataNascimento().format(FORMATO_DATA),
+                formatoSalario.format(funcionario.salario()),
+                funcionario.funcao()
+        );
+    }
+
+    public void toast(boolean sucesso, String mensagem) {
+        if (mensagem == null || mensagem.isBlank()) {
+            throw new IllegalArgumentException("Mensagem não pode ser nula ou vazia");
+        }
+        logger.log("%s: %s%n", sucesso ? "OK" : "ERRO", mensagem.trim());
+    }
+
+    private static DecimalFormat criarFormatoSalario() {
+        DecimalFormatSymbols simbolos = new DecimalFormatSymbols(Locale.forLanguageTag("pt-BR"));
+        simbolos.setGroupingSeparator('.');
+        simbolos.setDecimalSeparator(',');
+        DecimalFormat formato = new DecimalFormat("#,##0.00", simbolos);
+        formato.setGroupingUsed(true);
+        return formato;
+    }
+}
