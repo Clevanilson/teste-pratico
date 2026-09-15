@@ -1,7 +1,7 @@
 package br.com.iniflex.aplicacao.views;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
-import br.com.iniflex.aplicacao.servico.Logger;
+import br.com.iniflex.infra.servico.LoggerFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,14 +51,5 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.toast(true, null));
         assertThrows(IllegalArgumentException.class, () -> view.toast(true, ""));
         assertThrows(IllegalArgumentException.class, () -> view.toast(true, " "));
-    }
-
-    private static class LoggerFake implements Logger {
-        String mensagem;
-
-        @Override
-        public void log(String format, Object... args) {
-            mensagem = String.format(format, args);
-        }
     }
 }
