@@ -44,7 +44,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>br.com.iniflex.HelloWorld</mainClass>
+                            <mainClass>br.com.iniflex.Iniflex</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

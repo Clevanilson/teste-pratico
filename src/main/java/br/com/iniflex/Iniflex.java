@@ -1,12 +1,12 @@
 package br.com.iniflex;
 
-public class HelloWorld {
+public class Iniflex {
 
     public String mensagem() {
         return "Hello World";
     }
 
     public static void main(String[] args) {
-        System.out.println(new HelloWorld().mensagem());
+        System.out.println(new Iniflex().mensagem());
     }
 }

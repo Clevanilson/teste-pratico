@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class HelloWorldTest {
+class IniflexTest {
 
     @Test
     void deveRetornarHelloWorld() {
-        HelloWorld helloWorld = new HelloWorld();
-        assertEquals("Hello World", helloWorld.mensagem());
+        Iniflex iniflex = new Iniflex();
+        assertEquals("Hello World", iniflex.mensagem());
     }
 }
