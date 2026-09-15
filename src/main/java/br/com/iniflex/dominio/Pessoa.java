@@ -16,7 +16,7 @@ public abstract class Pessoa {
         return nome;
     }
 
-    public void setNome(String nome) {
+    private void setNome(String nome) {
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
@@ -27,7 +27,7 @@ public abstract class Pessoa {
         return dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
+    private void setDataNascimento(LocalDate dataNascimento) {
         if (dataNascimento == null) {
             throw new IllegalArgumentException("Data de nascimento não pode ser nula");
         }
