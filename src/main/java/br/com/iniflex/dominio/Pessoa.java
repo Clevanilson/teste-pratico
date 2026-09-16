@@ -1,6 +1,7 @@
 package br.com.iniflex.dominio;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public abstract class Pessoa {
     private String nome;
@@ -34,6 +35,10 @@ public abstract class Pessoa {
             throw new IllegalArgumentException("Data de nascimento não pode ser futura");
         }
         this.dataNascimento = dataNascimento;
+    }
+
+    public int getIdade() {
+        return Period.between(dataNascimento, LocalDate.now()).getYears();
     }
 
 }

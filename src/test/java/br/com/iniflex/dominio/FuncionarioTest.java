@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,4 +47,5 @@ class FuncionarioTest {
     void comDataNascimentoInvalida() {
         assertThrows(IllegalArgumentException.class, () -> new Funcionario(NOME, LocalDate.now().plusDays(1), SALARIO, FUNCAO));
     }
+
 }

@@ -2,10 +2,12 @@ package br.com.iniflex.aplicacao.controladores;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
+import br.com.iniflex.dominio.Ordenacao;
 
 public class FuncionarioControlador {
     private final CadastrarFuncionario cadastrarFuncionario;
@@ -13,6 +15,7 @@ public class FuncionarioControlador {
     private final ListarFuncionarios listarFuncionarios;
     private final ListarFuncionariosPorFuncao listarFuncionariosPorFuncao;
     private final ListarFuncionariosPorAniversario listarFuncionariosPorAniversario;
+    private final ListarFuncionarioMaisVelho listarFuncionarioMaisVelho;
     private final FuncionarioView funcionarioView;
 
     public FuncionarioControlador(
@@ -21,6 +24,7 @@ public class FuncionarioControlador {
             ListarFuncionarios listarFuncionarios,
             ListarFuncionariosPorFuncao listarFuncionariosPorFuncao,
             ListarFuncionariosPorAniversario listarFuncionariosPorAniversario,
+            ListarFuncionarioMaisVelho listarFuncionarioMaisVelho,
             FuncionarioView funcionarioView
     ) {
         this.cadastrarFuncionario = cadastrarFuncionario;
@@ -28,6 +32,7 @@ public class FuncionarioControlador {
         this.listarFuncionarios = listarFuncionarios;
         this.listarFuncionariosPorFuncao = listarFuncionariosPorFuncao;
         this.listarFuncionariosPorAniversario = listarFuncionariosPorAniversario;
+        this.listarFuncionarioMaisVelho = listarFuncionarioMaisVelho;
         this.funcionarioView = funcionarioView;
     }
 
@@ -58,8 +63,12 @@ public class FuncionarioControlador {
     }
 
     public void listarFuncionarios() {
+        listarFuncionarios(null);
+    }
+
+    public void listarFuncionarios(Ordenacao ordenacao) {
         try {
-            ListarFuncionarios.Output output = listarFuncionarios.executar();
+            ListarFuncionarios.Output output = listarFuncionarios.executar(ordenacao);
             funcionarioView.toast(true, "Funcionários listados");
             funcionarioView.exibir(output);
         } catch (RuntimeException e) {
@@ -91,6 +100,19 @@ public class FuncionarioControlador {
         } catch (RuntimeException e) {
             String mensagem = e.getMessage() == null || e.getMessage().isBlank()
                     ? "Falha ao listar funcionários por aniversário"
+                    : e.getMessage();
+            funcionarioView.toast(false, mensagem);
+        }
+    }
+
+    public void listarFuncionarioMaisVelho() {
+        try {
+            ListarFuncionarioMaisVelho.Output output = listarFuncionarioMaisVelho.executar();
+            funcionarioView.toast(true, "Funcionário mais velho listado");
+            funcionarioView.exibir(output);
+        } catch (RuntimeException e) {
+            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
+                    ? "Falha ao listar funcionário mais velho"
                     : e.getMessage();
             funcionarioView.toast(false, mensagem);
         }

@@ -2,12 +2,16 @@ package br.com.iniflex;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.controladores.FuncionarioControlador;
 import br.com.iniflex.aplicacao.repositorio.FuncionarioRepositorio;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
+import br.com.iniflex.dominio.Campo;
+import br.com.iniflex.dominio.Direcao;
+import br.com.iniflex.dominio.Ordenacao;
 import br.com.iniflex.infra.repositorio.FuncionarioMemoriaRepositorio;
 import br.com.iniflex.infra.servico.PrintfLogger;
 
@@ -27,6 +31,7 @@ public class Iniflex {
                 new ListarFuncionarios(funcionarioRepositorio),
                 new ListarFuncionariosPorFuncao(funcionarioRepositorio),
                 new ListarFuncionariosPorAniversario(funcionarioRepositorio),
+                new ListarFuncionarioMaisVelho(funcionarioRepositorio),
                 new FuncionarioView(new PrintfLogger())
         );
     }
@@ -62,6 +67,10 @@ public class Iniflex {
         funcionarioControlador.listarFuncionarios();
     }
 
+    public void listarFuncionarios(Ordenacao ordenacao) {
+        funcionarioControlador.listarFuncionarios(ordenacao);
+    }
+
     public void listarFuncionariosPorFuncao() {
         funcionarioControlador.listarFuncionariosPorFuncao();
     }
@@ -70,6 +79,10 @@ public class Iniflex {
         funcionarioControlador.listarFuncionariosPorAniversario(
                 new ListarFuncionariosPorAniversario.Input(List.of(10, 12))
         );
+    }
+
+    public void listarFuncionarioMaisVelho() {
+        funcionarioControlador.listarFuncionarioMaisVelho();
     }
 
     public String mensagem() {
@@ -83,5 +96,7 @@ public class Iniflex {
         iniflex.listarFuncionarios();
         iniflex.listarFuncionariosPorFuncao();
         iniflex.listarFuncionariosPorAniversario();
+        iniflex.listarFuncionarioMaisVelho();
+        iniflex.listarFuncionarios(new Ordenacao(Campo.NOME, Direcao.CRESCENTE));
     }
 }

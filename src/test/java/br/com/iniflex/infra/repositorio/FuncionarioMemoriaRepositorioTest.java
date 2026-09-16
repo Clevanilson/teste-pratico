@@ -1,6 +1,10 @@
 package br.com.iniflex.infra.repositorio;
 
+import br.com.iniflex.dominio.Campo;
+import br.com.iniflex.dominio.Consulta;
+import br.com.iniflex.dominio.Direcao;
 import br.com.iniflex.dominio.Funcionario;
+import br.com.iniflex.dominio.Ordenacao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -97,5 +101,38 @@ class FuncionarioMemoriaRepositorioTest {
     @Test
     void removendoInexistente() {
         assertThrows(IllegalArgumentException.class, () -> repositorio.remover("João"));
+    }
+
+    @Test
+    void listandoOrdenadoPorNome() {
+        repositorio.salvar(maria);
+        repositorio.salvar(joao);
+        repositorio.salvar(caio);
+        List<Funcionario> funcionarios = repositorio.listar(new Consulta(new Ordenacao(Campo.NOME, Direcao.CRESCENTE), null));
+        assertEquals(3, funcionarios.size());
+        assertEquals("Caio", funcionarios.get(0).getNome());
+        assertEquals("João", funcionarios.get(1).getNome());
+        assertEquals("Maria", funcionarios.get(2).getNome());
+    }
+
+    @Test
+    void listandoMaisVelhoComLimite() {
+        repositorio.salvar(maria);
+        repositorio.salvar(joao);
+        repositorio.salvar(caio);
+        List<Funcionario> funcionarios = repositorio.listar(new Consulta(new Ordenacao(Campo.IDADE, Direcao.DECRESCENTE), 1));
+        assertEquals(1, funcionarios.size());
+        assertEquals("Caio", funcionarios.get(0).getNome());
+    }
+
+    @Test
+    void listandoComLimiteSemOrdenacao() {
+        repositorio.salvar(maria);
+        repositorio.salvar(joao);
+        repositorio.salvar(caio);
+        List<Funcionario> funcionarios = repositorio.listar(new Consulta(null, 2));
+        assertEquals(2, funcionarios.size());
+        assertEquals("Maria", funcionarios.get(0).getNome());
+        assertEquals("João", funcionarios.get(1).getNome());
     }
 }

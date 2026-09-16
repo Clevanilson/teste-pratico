@@ -1,7 +1,9 @@
 package br.com.iniflex.aplicacao.casodeuso;
 
 import br.com.iniflex.aplicacao.repositorio.FuncionarioRepositorio;
+import br.com.iniflex.dominio.Consulta;
 import br.com.iniflex.dominio.Funcionario;
+import br.com.iniflex.dominio.Ordenacao;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +17,11 @@ public class ListarFuncionarios {
     }
 
     public Output executar() {
-        List<Funcionario> funcionarios = funcionarioRepositorio.listar();
+        return executar(null);
+    }
+
+    public Output executar(Ordenacao ordenacao) {
+        List<Funcionario> funcionarios = funcionarioRepositorio.listar(new Consulta(ordenacao, null));
         return new Output(
                 funcionarios.stream()
                         .map(funcionario -> new Output.Funcionario(

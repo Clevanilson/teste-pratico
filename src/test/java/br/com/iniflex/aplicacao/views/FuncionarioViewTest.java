@@ -2,6 +2,7 @@ package br.com.iniflex.aplicacao.views;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
@@ -46,6 +47,8 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionariosPorFuncao.Output(null)));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionariosPorAniversario.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionariosPorAniversario.Output(null)));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionarioMaisVelho.Output) null));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionarioMaisVelho.Output(null)));
     }
 
     @Test
@@ -134,6 +137,14 @@ class FuncionarioViewTest {
                         + "Miguel | 14/10/1988 | 19.119,88 | Diretor" + System.lineSeparator(),
                 logger.mensagem
         );
+    }
+
+    @Test
+    void exibindoFuncionarioMaisVelho() {
+        view.exibir(new ListarFuncionarioMaisVelho.Output(List.of(
+                new ListarFuncionarioMaisVelho.Output.Funcionario("Caio", 65)
+        )));
+        assertEquals("Caio | 65" + System.lineSeparator(), logger.mensagem);
     }
 
     @Test

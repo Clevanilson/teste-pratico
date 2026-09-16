@@ -2,6 +2,7 @@ package br.com.iniflex.aplicacao.views;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
@@ -80,6 +81,18 @@ public class FuncionarioView {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
             exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+        }
+    }
+
+    public void exibir(ListarFuncionarioMaisVelho.Output funcionarios) {
+        if (funcionarios == null || funcionarios.funcionarios() == null) {
+            throw new IllegalArgumentException("Funcionários não podem ser nulos");
+        }
+        for (ListarFuncionarioMaisVelho.Output.Funcionario funcionario : funcionarios.funcionarios()) {
+            if (funcionario == null) {
+                throw new IllegalArgumentException("Funcionário não pode ser nulo");
+            }
+            logger.log("%s | %d%n", funcionario.nome(), funcionario.idade());
         }
     }
 
