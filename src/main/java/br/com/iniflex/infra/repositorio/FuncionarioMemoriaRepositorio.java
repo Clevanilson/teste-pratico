@@ -53,29 +53,6 @@ public class FuncionarioMemoriaRepositorio implements FuncionarioRepositorio {
         return copia;
     }
 
-    @Override
-    public List<Funcionario> listarPorMesesAniversario(List<Integer> meses) {
-        validarMeses(meses);
-        List<Funcionario> aniversariantes = new ArrayList<>();
-        for (Funcionario funcionario : funcionarios) {
-            if (meses.contains(funcionario.getDataNascimento().getMonthValue())) {
-                aniversariantes.add(funcionario);
-            }
-        }
-        return aniversariantes;
-    }
-
-    private void validarMeses(List<Integer> meses) {
-        if (meses == null || meses.isEmpty()) {
-            throw new IllegalArgumentException("Meses não podem ser nulos ou vazios");
-        }
-        for (Integer mes : meses) {
-            if (mes == null || mes < 1 || mes > 12) {
-                throw new IllegalArgumentException("Mês deve estar entre 1 e 12");
-            }
-        }
-    }
-
     private Funcionario buscarPorNome(String nome) {
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");

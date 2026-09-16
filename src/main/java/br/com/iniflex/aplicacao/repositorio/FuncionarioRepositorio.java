@@ -10,5 +10,4 @@ public interface FuncionarioRepositorio {
     Funcionario remover(String nome);
     List<Funcionario> listar();
     Map<String, List<Funcionario>> listarPorFuncao();
-    List<Funcionario> listarPorMesesAniversario(List<Integer> meses);
 }
