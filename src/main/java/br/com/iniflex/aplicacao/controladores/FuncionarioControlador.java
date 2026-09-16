@@ -3,6 +3,7 @@ package br.com.iniflex.aplicacao.controladores;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
 
@@ -11,6 +12,7 @@ public class FuncionarioControlador {
     private final ExcluirFuncionario excluirFuncionario;
     private final ListarFuncionarios listarFuncionarios;
     private final ListarFuncionariosPorFuncao listarFuncionariosPorFuncao;
+    private final ListarFuncionariosPorAniversario listarFuncionariosPorAniversario;
     private final FuncionarioView funcionarioView;
 
     public FuncionarioControlador(
@@ -18,12 +20,14 @@ public class FuncionarioControlador {
             ExcluirFuncionario excluirFuncionario,
             ListarFuncionarios listarFuncionarios,
             ListarFuncionariosPorFuncao listarFuncionariosPorFuncao,
+            ListarFuncionariosPorAniversario listarFuncionariosPorAniversario,
             FuncionarioView funcionarioView
     ) {
         this.cadastrarFuncionario = cadastrarFuncionario;
         this.excluirFuncionario = excluirFuncionario;
         this.listarFuncionarios = listarFuncionarios;
         this.listarFuncionariosPorFuncao = listarFuncionariosPorFuncao;
+        this.listarFuncionariosPorAniversario = listarFuncionariosPorAniversario;
         this.funcionarioView = funcionarioView;
     }
 
@@ -74,6 +78,19 @@ public class FuncionarioControlador {
         } catch (RuntimeException e) {
             String mensagem = e.getMessage() == null || e.getMessage().isBlank()
                     ? "Falha ao listar funcionários por função"
+                    : e.getMessage();
+            funcionarioView.toast(false, mensagem);
+        }
+    }
+
+    public void listarFuncionariosPorAniversario(ListarFuncionariosPorAniversario.Input input) {
+        try {
+            ListarFuncionariosPorAniversario.Output output = listarFuncionariosPorAniversario.executar(input);
+            funcionarioView.toast(true, "Funcionários listados por aniversário");
+            funcionarioView.exibir(output);
+        } catch (RuntimeException e) {
+            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
+                    ? "Falha ao listar funcionários por aniversário"
                     : e.getMessage();
             funcionarioView.toast(false, mensagem);
         }

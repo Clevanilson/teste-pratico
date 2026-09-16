@@ -3,6 +3,7 @@ package br.com.iniflex;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.controladores.FuncionarioControlador;
 import br.com.iniflex.aplicacao.repositorio.FuncionarioRepositorio;
@@ -12,6 +13,7 @@ import br.com.iniflex.infra.servico.PrintfLogger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Iniflex {
     private final FuncionarioRepositorio funcionarioRepositorio;
@@ -24,6 +26,7 @@ public class Iniflex {
                 new ExcluirFuncionario(funcionarioRepositorio),
                 new ListarFuncionarios(funcionarioRepositorio),
                 new ListarFuncionariosPorFuncao(funcionarioRepositorio),
+                new ListarFuncionariosPorAniversario(funcionarioRepositorio),
                 new FuncionarioView(new PrintfLogger())
         );
     }
@@ -63,6 +66,12 @@ public class Iniflex {
         funcionarioControlador.listarFuncionariosPorFuncao();
     }
 
+    public void listarFuncionariosPorAniversario() {
+        funcionarioControlador.listarFuncionariosPorAniversario(
+                new ListarFuncionariosPorAniversario.Input(List.of(10, 12))
+        );
+    }
+
     public String mensagem() {
         return "Hello World";
     }
@@ -73,5 +82,6 @@ public class Iniflex {
         iniflex.excluirFuncionarios();
         iniflex.listarFuncionarios();
         iniflex.listarFuncionariosPorFuncao();
+        iniflex.listarFuncionariosPorAniversario();
     }
 }

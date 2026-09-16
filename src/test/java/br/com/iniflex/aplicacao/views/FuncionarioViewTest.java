@@ -3,6 +3,7 @@ package br.com.iniflex.aplicacao.views;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.infra.servico.LoggerFake;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,8 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionarios.Output(null)));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionariosPorFuncao.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionariosPorFuncao.Output(null)));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionariosPorAniversario.Output) null));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionariosPorAniversario.Output(null)));
     }
 
     @Test
@@ -106,6 +109,29 @@ class FuncionarioViewTest {
                         + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator()
                         + "Coordenador" + System.lineSeparator()
                         + "Caio | 02/05/1961 | 9.836,14 | Coordenador" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void exibindoFuncionariosPorAniversario() {
+        view.exibir(new ListarFuncionariosPorAniversario.Output(List.of(
+                new ListarFuncionariosPorAniversario.Output.Funcionario(
+                        "Maria",
+                        LocalDate.of(2000, 10, 18),
+                        new BigDecimal("2009.44"),
+                        "Operador"
+                ),
+                new ListarFuncionariosPorAniversario.Output.Funcionario(
+                        "Miguel",
+                        LocalDate.of(1988, 10, 14),
+                        new BigDecimal("19119.88"),
+                        "Diretor"
+                )
+        )));
+        assertEquals(
+                "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
+                        + "Miguel | 14/10/1988 | 19.119,88 | Diretor" + System.lineSeparator(),
                 logger.mensagem
         );
     }

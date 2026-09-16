@@ -3,6 +3,7 @@ package br.com.iniflex.aplicacao.controladores;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
 import br.com.iniflex.dominio.Funcionario;
@@ -32,6 +33,7 @@ class FuncionarioControladorTest {
                 new ExcluirFuncionario(repositorio),
                 new ListarFuncionarios(repositorio),
                 new ListarFuncionariosPorFuncao(repositorio),
+                new ListarFuncionariosPorAniversario(repositorio),
                 new FuncionarioView(logger)
         );
         maria = new CadastrarFuncionario.Input("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador");
@@ -137,5 +139,42 @@ class FuncionarioControladorTest {
     void listandoPorFuncaoVazio() {
         controlador.listarFuncionariosPorFuncao();
         assertEquals("OK: Funcionários listados por função" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void listandoPorAniversarioValido() {
+        controlador.cadastrarFuncionario(maria);
+        controlador.cadastrarFuncionario(new CadastrarFuncionario.Input(
+                "João",
+                LocalDate.of(1990, 5, 12),
+                new BigDecimal("2284.38"),
+                "Operador"
+        ));
+        controlador.cadastrarFuncionario(new CadastrarFuncionario.Input(
+                "Miguel",
+                LocalDate.of(1988, 10, 14),
+                new BigDecimal("19119.88"),
+                "Diretor"
+        ));
+        logger.mensagem = "";
+        controlador.listarFuncionariosPorAniversario(new ListarFuncionariosPorAniversario.Input(List.of(10, 12)));
+        assertEquals(
+                "OK: Funcionários listados por aniversário" + System.lineSeparator()
+                        + "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
+                        + "Miguel | 14/10/1988 | 19.119,88 | Diretor" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void listandoPorAniversarioVazio() {
+        controlador.listarFuncionariosPorAniversario(new ListarFuncionariosPorAniversario.Input(List.of(10, 12)));
+        assertEquals("OK: Funcionários listados por aniversário" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void listandoPorAniversarioInvalido() {
+        controlador.listarFuncionariosPorAniversario(null);
+        assertEquals("ERRO: Entrada não pode ser nula" + System.lineSeparator(), logger.mensagem);
     }
 }

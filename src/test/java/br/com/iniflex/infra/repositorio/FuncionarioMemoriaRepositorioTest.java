@@ -19,6 +19,8 @@ class FuncionarioMemoriaRepositorioTest {
     private Funcionario maria;
     private Funcionario joao;
     private Funcionario caio;
+    private Funcionario miguel;
+    private Funcionario heitor;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +28,8 @@ class FuncionarioMemoriaRepositorioTest {
         maria = new Funcionario("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador");
         joao = new Funcionario("João", LocalDate.of(1990, 5, 12), new BigDecimal("2284.38"), "Operador");
         caio = new Funcionario("Caio", LocalDate.of(1961, 5, 2), new BigDecimal("9836.14"), "Coordenador");
+        miguel = new Funcionario("Miguel", LocalDate.of(1988, 10, 14), new BigDecimal("19119.88"), "Diretor");
+        heitor = new Funcionario("Heitor", LocalDate.of(1999, 11, 19), new BigDecimal("1582.72"), "Operador");
     }
 
     @Test
@@ -97,5 +101,32 @@ class FuncionarioMemoriaRepositorioTest {
     @Test
     void removendoInexistente() {
         assertThrows(IllegalArgumentException.class, () -> repositorio.remover("João"));
+    }
+
+    @Test
+    void listandoPorMesesAniversario() {
+        repositorio.salvar(maria);
+        repositorio.salvar(joao);
+        repositorio.salvar(caio);
+        repositorio.salvar(miguel);
+        repositorio.salvar(heitor);
+        List<Funcionario> aniversariantes = repositorio.listarPorMesesAniversario(List.of(10, 12));
+        assertEquals(2, aniversariantes.size());
+        assertEquals("Maria", aniversariantes.get(0).getNome());
+        assertEquals("Miguel", aniversariantes.get(1).getNome());
+    }
+
+    @Test
+    void listandoPorMesesAniversarioVazio() {
+        repositorio.salvar(joao);
+        assertTrue(repositorio.listarPorMesesAniversario(List.of(10, 12)).isEmpty());
+    }
+
+    @Test
+    void listandoPorMesesAniversarioInvalido() {
+        assertThrows(IllegalArgumentException.class, () -> repositorio.listarPorMesesAniversario(null));
+        assertThrows(IllegalArgumentException.class, () -> repositorio.listarPorMesesAniversario(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> repositorio.listarPorMesesAniversario(List.of(0)));
+        assertThrows(IllegalArgumentException.class, () -> repositorio.listarPorMesesAniversario(List.of(13)));
     }
 }
