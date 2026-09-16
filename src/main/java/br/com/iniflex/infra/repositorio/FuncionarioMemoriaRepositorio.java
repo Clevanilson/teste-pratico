@@ -34,10 +34,11 @@ public class FuncionarioMemoriaRepositorio implements FuncionarioRepositorio {
     }
 
     @Override
-    public void remover(String nome) {
+    public Funcionario remover(String nome) {
         Funcionario funcionario = buscarPorNome(nome);
         funcionarios.remove(funcionario);
         removerDoMapa(funcionario);
+        return funcionario;
     }
 
     @Override

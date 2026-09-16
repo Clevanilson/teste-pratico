@@ -1,6 +1,7 @@
 package br.com.iniflex.aplicacao.controladores;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
 import br.com.iniflex.dominio.Funcionario;
 import br.com.iniflex.infra.repositorio.FuncionarioMemoriaRepositorio;
@@ -26,6 +27,7 @@ class FuncionarioControladorTest {
         logger = new LoggerFake();
         controlador = new FuncionarioControlador(
                 new CadastrarFuncionario(repositorio),
+                new ExcluirFuncionario(repositorio),
                 new FuncionarioView(logger)
         );
         maria = new CadastrarFuncionario.Input("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador");
@@ -50,6 +52,26 @@ class FuncionarioControladorTest {
     @Test
     void cadastrandoInvalido() {
         controlador.cadastrarFuncionario(null);
+        assertEquals(0, repositorio.listar().size());
+        assertEquals("ERRO: Entrada não pode ser nula" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void excluindoValido() {
+        controlador.cadastrarFuncionario(maria);
+        logger.mensagem = "";
+        controlador.excluirFuncionario(new ExcluirFuncionario.Input("Maria"));
+        assertEquals(0, repositorio.listar().size());
+        assertEquals(
+                "OK: Funcionário excluído" + System.lineSeparator()
+                        + "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void excluindoInvalido() {
+        controlador.excluirFuncionario(null);
         assertEquals(0, repositorio.listar().size());
         assertEquals("ERRO: Entrada não pode ser nula" + System.lineSeparator(), logger.mensagem);
     }

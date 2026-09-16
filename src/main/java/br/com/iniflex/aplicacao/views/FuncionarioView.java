@@ -1,10 +1,13 @@
 package br.com.iniflex.aplicacao.views;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.servico.Logger;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -23,13 +26,14 @@ public class FuncionarioView {
         if (funcionario == null) {
             throw new IllegalArgumentException("Funcionário não pode ser nulo");
         }
-        logger.log(
-                "%s | %s | %s | %s%n",
-                funcionario.nome(),
-                funcionario.dataNascimento().format(FORMATO_DATA),
-                formatoSalario.format(funcionario.salario()),
-                funcionario.funcao()
-        );
+        exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+    }
+
+    public void exibir(ExcluirFuncionario.Output funcionario) {
+        if (funcionario == null) {
+            throw new IllegalArgumentException("Funcionário não pode ser nulo");
+        }
+        exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
     }
 
     public void toast(boolean sucesso, String mensagem) {
@@ -37,6 +41,16 @@ public class FuncionarioView {
             throw new IllegalArgumentException("Mensagem não pode ser nula ou vazia");
         }
         logger.log("%s: %s%n", sucesso ? "OK" : "ERRO", mensagem.trim());
+    }
+
+    private void exibir(String nome, LocalDate dataNascimento, BigDecimal salario, String funcao) {
+        logger.log(
+                "%s | %s | %s | %s%n",
+                nome,
+                dataNascimento.format(FORMATO_DATA),
+                formatoSalario.format(salario),
+                funcao
+        );
     }
 
     private static DecimalFormat criarFormatoSalario() {

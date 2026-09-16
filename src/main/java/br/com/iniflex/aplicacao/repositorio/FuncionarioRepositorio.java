@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface FuncionarioRepositorio {
     void salvar(Funcionario funcionario);
-    void remover(String nome);
+    Funcionario remover(String nome);
     List<Funcionario> listar();
 }
