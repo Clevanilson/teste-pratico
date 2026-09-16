@@ -3,6 +3,7 @@ package br.com.iniflex.aplicacao.views;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.servico.Logger;
 
 import java.math.BigDecimal;
@@ -10,7 +11,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class FuncionarioView {
     private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -46,6 +49,24 @@ public class FuncionarioView {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
             exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+        }
+    }
+
+    public void exibir(ListarFuncionariosPorFuncao.Output funcionarios) {
+        if (funcionarios == null || funcionarios.funcionariosPorFuncao() == null) {
+            throw new IllegalArgumentException("Funcionários não podem ser nulos");
+        }
+        for (Map.Entry<String, List<ListarFuncionariosPorFuncao.Output.Funcionario>> grupo : funcionarios.funcionariosPorFuncao().entrySet()) {
+            if (grupo.getKey() == null || grupo.getKey().isBlank() || grupo.getValue() == null) {
+                throw new IllegalArgumentException("Funcionários não podem ser nulos");
+            }
+            logger.log("%s%n", grupo.getKey());
+            for (ListarFuncionariosPorFuncao.Output.Funcionario funcionario : grupo.getValue()) {
+                if (funcionario == null) {
+                    throw new IllegalArgumentException("Funcionário não pode ser nulo");
+                }
+                exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+            }
         }
     }
 

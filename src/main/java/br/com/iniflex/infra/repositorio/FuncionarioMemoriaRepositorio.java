@@ -46,6 +46,7 @@ public class FuncionarioMemoriaRepositorio implements FuncionarioRepositorio {
         return new ArrayList<>(funcionarios);
     }
 
+    @Override
     public Map<String, List<Funcionario>> listarPorFuncao() {
         Map<String, List<Funcionario>> copia = new LinkedHashMap<>();
         funcionariosPorFuncao.forEach((funcao, lista) -> copia.put(funcao, new ArrayList<>(lista)));

@@ -3,13 +3,16 @@ package br.com.iniflex.aplicacao.views;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.infra.servico.LoggerFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,6 +41,8 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ExcluirFuncionario.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionarios.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionarios.Output(null)));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionariosPorFuncao.Output) null));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionariosPorFuncao.Output(null)));
     }
 
     @Test
@@ -65,6 +70,42 @@ class FuncionarioViewTest {
         assertEquals(
                 "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
                         + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void exibindoFuncionariosAgrupadosPorFuncao() {
+        Map<String, List<ListarFuncionariosPorFuncao.Output.Funcionario>> funcionariosPorFuncao = new LinkedHashMap<>();
+        funcionariosPorFuncao.put("Operador", List.of(
+                new ListarFuncionariosPorFuncao.Output.Funcionario(
+                        "Maria",
+                        LocalDate.of(2000, 10, 18),
+                        new BigDecimal("2009.44"),
+                        "Operador"
+                ),
+                new ListarFuncionariosPorFuncao.Output.Funcionario(
+                        "João",
+                        LocalDate.of(1990, 5, 12),
+                        new BigDecimal("2284.38"),
+                        "Operador"
+                )
+        ));
+        funcionariosPorFuncao.put("Coordenador", List.of(
+                new ListarFuncionariosPorFuncao.Output.Funcionario(
+                        "Caio",
+                        LocalDate.of(1961, 5, 2),
+                        new BigDecimal("9836.14"),
+                        "Coordenador"
+                )
+        ));
+        view.exibir(new ListarFuncionariosPorFuncao.Output(funcionariosPorFuncao));
+        assertEquals(
+                "Operador" + System.lineSeparator()
+                        + "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
+                        + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator()
+                        + "Coordenador" + System.lineSeparator()
+                        + "Caio | 02/05/1961 | 9.836,14 | Coordenador" + System.lineSeparator(),
                 logger.mensagem
         );
     }

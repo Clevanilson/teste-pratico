@@ -3,6 +3,7 @@ package br.com.iniflex.aplicacao.controladores;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
 import br.com.iniflex.dominio.Funcionario;
 import br.com.iniflex.infra.repositorio.FuncionarioMemoriaRepositorio;
@@ -30,6 +31,7 @@ class FuncionarioControladorTest {
                 new CadastrarFuncionario(repositorio),
                 new ExcluirFuncionario(repositorio),
                 new ListarFuncionarios(repositorio),
+                new ListarFuncionariosPorFuncao(repositorio),
                 new FuncionarioView(logger)
         );
         maria = new CadastrarFuncionario.Input("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador");
@@ -101,5 +103,39 @@ class FuncionarioControladorTest {
     void listandoVazio() {
         controlador.listarFuncionarios();
         assertEquals("OK: Funcionários listados" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void listandoPorFuncaoValido() {
+        controlador.cadastrarFuncionario(maria);
+        controlador.cadastrarFuncionario(new CadastrarFuncionario.Input(
+                "João",
+                LocalDate.of(1990, 5, 12),
+                new BigDecimal("2284.38"),
+                "Operador"
+        ));
+        controlador.cadastrarFuncionario(new CadastrarFuncionario.Input(
+                "Caio",
+                LocalDate.of(1961, 5, 2),
+                new BigDecimal("9836.14"),
+                "Coordenador"
+        ));
+        logger.mensagem = "";
+        controlador.listarFuncionariosPorFuncao();
+        assertEquals(
+                "OK: Funcionários listados por função" + System.lineSeparator()
+                        + "Operador" + System.lineSeparator()
+                        + "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
+                        + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator()
+                        + "Coordenador" + System.lineSeparator()
+                        + "Caio | 02/05/1961 | 9.836,14 | Coordenador" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void listandoPorFuncaoVazio() {
+        controlador.listarFuncionariosPorFuncao();
+        assertEquals("OK: Funcionários listados por função" + System.lineSeparator(), logger.mensagem);
     }
 }
