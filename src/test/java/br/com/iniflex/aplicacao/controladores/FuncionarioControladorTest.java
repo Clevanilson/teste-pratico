@@ -6,6 +6,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
+import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
 import br.com.iniflex.dominio.Campo;
 import br.com.iniflex.dominio.Direcao;
@@ -40,6 +41,7 @@ class FuncionarioControladorTest {
                 new ListarFuncionariosPorFuncao(repositorio),
                 new ListarFuncionariosPorAniversario(repositorio),
                 new ListarFuncionarioMaisVelho(repositorio),
+                new ListarQuantidadeSalariosMinimos(repositorio),
                 new FuncionarioView(logger)
         );
         maria = new CadastrarFuncionario.Input("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador");
@@ -207,6 +209,31 @@ class FuncionarioControladorTest {
     void listandoMaisVelhoVazio() {
         controlador.listarFuncionarioMaisVelho();
         assertEquals("OK: Funcionário mais velho listado" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void listandoQuantidadeSalariosMinimosValido() {
+        controlador.cadastrarFuncionario(maria);
+        controlador.cadastrarFuncionario(new CadastrarFuncionario.Input(
+                "João",
+                LocalDate.of(1990, 5, 12),
+                new BigDecimal("2284.38"),
+                "Operador"
+        ));
+        logger.mensagem = "";
+        controlador.listarQuantidadeSalariosMinimos();
+        assertEquals(
+                "OK: Quantidade de salários mínimos listada" + System.lineSeparator()
+                        + "Maria | 1,66" + System.lineSeparator()
+                        + "João | 1,88" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void listandoQuantidadeSalariosMinimosVazio() {
+        controlador.listarQuantidadeSalariosMinimos();
+        assertEquals("OK: Quantidade de salários mínimos listada" + System.lineSeparator(), logger.mensagem);
     }
 
     @Test

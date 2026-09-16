@@ -6,6 +6,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
+import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
 import br.com.iniflex.aplicacao.servico.Logger;
 
 import java.math.BigDecimal;
@@ -93,6 +94,22 @@ public class FuncionarioView {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
             logger.log("%s | %d%n", funcionario.nome(), funcionario.idade());
+        }
+    }
+
+    public void exibir(ListarQuantidadeSalariosMinimos.Output funcionarios) {
+        if (funcionarios == null || funcionarios.funcionarios() == null) {
+            throw new IllegalArgumentException("Funcionários não podem ser nulos");
+        }
+        for (ListarQuantidadeSalariosMinimos.Output.Funcionario funcionario : funcionarios.funcionarios()) {
+            if (funcionario == null) {
+                throw new IllegalArgumentException("Funcionário não pode ser nulo");
+            }
+            logger.log(
+                    "%s | %s%n",
+                    funcionario.nome(),
+                    formatoSalario.format(funcionario.quantidadeSalariosMinimos())
+            );
         }
     }
 

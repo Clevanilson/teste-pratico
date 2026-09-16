@@ -6,6 +6,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
+import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
 import br.com.iniflex.infra.servico.LoggerFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,8 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionariosPorAniversario.Output(null)));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionarioMaisVelho.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionarioMaisVelho.Output(null)));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarQuantidadeSalariosMinimos.Output) null));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarQuantidadeSalariosMinimos.Output(null)));
     }
 
     @Test
@@ -145,6 +148,19 @@ class FuncionarioViewTest {
                 new ListarFuncionarioMaisVelho.Output.Funcionario("Caio", 65)
         )));
         assertEquals("Caio | 65" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void exibindoQuantidadeSalariosMinimos() {
+        view.exibir(new ListarQuantidadeSalariosMinimos.Output(List.of(
+                new ListarQuantidadeSalariosMinimos.Output.Funcionario("Maria", new BigDecimal("1.66")),
+                new ListarQuantidadeSalariosMinimos.Output.Funcionario("João", new BigDecimal("1.89"))
+        )));
+        assertEquals(
+                "Maria | 1,66" + System.lineSeparator()
+                        + "João | 1,89" + System.lineSeparator(),
+                logger.mensagem
+        );
     }
 
     @Test

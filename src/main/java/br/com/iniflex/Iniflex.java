@@ -6,6 +6,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
+import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
 import br.com.iniflex.aplicacao.controladores.FuncionarioControlador;
 import br.com.iniflex.aplicacao.repositorio.FuncionarioRepositorio;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
@@ -32,6 +33,7 @@ public class Iniflex {
                 new ListarFuncionariosPorFuncao(funcionarioRepositorio),
                 new ListarFuncionariosPorAniversario(funcionarioRepositorio),
                 new ListarFuncionarioMaisVelho(funcionarioRepositorio),
+                new ListarQuantidadeSalariosMinimos(funcionarioRepositorio),
                 new FuncionarioView(new PrintfLogger())
         );
     }
@@ -85,6 +87,10 @@ public class Iniflex {
         funcionarioControlador.listarFuncionarioMaisVelho();
     }
 
+    public void listarQuantidadeSalariosMinimos() {
+        funcionarioControlador.listarQuantidadeSalariosMinimos();
+    }
+
     public String mensagem() {
         return "Hello World";
     }
@@ -98,5 +104,6 @@ public class Iniflex {
         iniflex.listarFuncionariosPorAniversario();
         iniflex.listarFuncionarioMaisVelho();
         iniflex.listarFuncionarios(new Ordenacao(Campo.NOME, Direcao.CRESCENTE));
+        iniflex.listarQuantidadeSalariosMinimos();
     }
 }

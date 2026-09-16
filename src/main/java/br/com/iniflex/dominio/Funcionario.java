@@ -1,9 +1,12 @@
 package br.com.iniflex.dominio;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 public class Funcionario extends Pessoa {
+    private static final BigDecimal SALARIO_MINIMO = new BigDecimal("1212.00");
+
     private BigDecimal salario;
     private String funcao;
 
@@ -25,6 +28,10 @@ public class Funcionario extends Pessoa {
             throw new IllegalArgumentException("Salário não pode ser negativo");
         }
         this.salario = salario;
+    }
+
+    public BigDecimal getQuantidadeSalariosMinimos() {
+        return salario.divide(SALARIO_MINIMO, 2, RoundingMode.HALF_UP);
     }
 
     public String getFuncao() {

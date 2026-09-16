@@ -48,4 +48,16 @@ class FuncionarioTest {
         assertThrows(IllegalArgumentException.class, () -> new Funcionario(NOME, LocalDate.now().plusDays(1), SALARIO, FUNCAO));
     }
 
+    @Test
+    void quantidadeSalariosMinimos() {
+        Funcionario funcionario = new Funcionario(NOME, DATA_NASCIMENTO, SALARIO, FUNCAO);
+        assertEquals(new BigDecimal("1.66"), funcionario.getQuantidadeSalariosMinimos());
+    }
+
+    @Test
+    void quantidadeSalariosMinimosExata() {
+        Funcionario funcionario = new Funcionario(NOME, DATA_NASCIMENTO, new BigDecimal("2424.00"), FUNCAO);
+        assertEquals(new BigDecimal("2.00"), funcionario.getQuantidadeSalariosMinimos());
+    }
+
 }

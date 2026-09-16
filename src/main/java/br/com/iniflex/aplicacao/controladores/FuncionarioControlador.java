@@ -6,6 +6,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
+import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
 import br.com.iniflex.dominio.Ordenacao;
 
@@ -16,6 +17,7 @@ public class FuncionarioControlador {
     private final ListarFuncionariosPorFuncao listarFuncionariosPorFuncao;
     private final ListarFuncionariosPorAniversario listarFuncionariosPorAniversario;
     private final ListarFuncionarioMaisVelho listarFuncionarioMaisVelho;
+    private final ListarQuantidadeSalariosMinimos listarQuantidadeSalariosMinimos;
     private final FuncionarioView funcionarioView;
 
     public FuncionarioControlador(
@@ -25,6 +27,7 @@ public class FuncionarioControlador {
             ListarFuncionariosPorFuncao listarFuncionariosPorFuncao,
             ListarFuncionariosPorAniversario listarFuncionariosPorAniversario,
             ListarFuncionarioMaisVelho listarFuncionarioMaisVelho,
+            ListarQuantidadeSalariosMinimos listarQuantidadeSalariosMinimos,
             FuncionarioView funcionarioView
     ) {
         this.cadastrarFuncionario = cadastrarFuncionario;
@@ -33,6 +36,7 @@ public class FuncionarioControlador {
         this.listarFuncionariosPorFuncao = listarFuncionariosPorFuncao;
         this.listarFuncionariosPorAniversario = listarFuncionariosPorAniversario;
         this.listarFuncionarioMaisVelho = listarFuncionarioMaisVelho;
+        this.listarQuantidadeSalariosMinimos = listarQuantidadeSalariosMinimos;
         this.funcionarioView = funcionarioView;
     }
 
@@ -113,6 +117,19 @@ public class FuncionarioControlador {
         } catch (RuntimeException e) {
             String mensagem = e.getMessage() == null || e.getMessage().isBlank()
                     ? "Falha ao listar funcionário mais velho"
+                    : e.getMessage();
+            funcionarioView.toast(false, mensagem);
+        }
+    }
+
+    public void listarQuantidadeSalariosMinimos() {
+        try {
+            ListarQuantidadeSalariosMinimos.Output output = listarQuantidadeSalariosMinimos.executar();
+            funcionarioView.toast(true, "Quantidade de salários mínimos listada");
+            funcionarioView.exibir(output);
+        } catch (RuntimeException e) {
+            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
+                    ? "Falha ao listar quantidade de salários mínimos"
                     : e.getMessage();
             funcionarioView.toast(false, mensagem);
         }
