@@ -1,5 +1,6 @@
 package br.com.iniflex.aplicacao.views;
 
+import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
@@ -44,6 +45,8 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ExcluirFuncionario.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionarios.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionarios.Output(null)));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir((AumentarSalarioFuncionario.Output) null));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir(new AumentarSalarioFuncionario.Output(null)));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionariosPorFuncao.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionariosPorFuncao.Output(null)));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarFuncionariosPorAniversario.Output) null));
@@ -79,6 +82,29 @@ class FuncionarioViewTest {
         assertEquals(
                 "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
                         + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void exibindoSalariosAumentados() {
+        view.exibir(new AumentarSalarioFuncionario.Output(List.of(
+                new AumentarSalarioFuncionario.Output.Funcionario(
+                        "Maria",
+                        LocalDate.of(2000, 10, 18),
+                        new BigDecimal("2210.38"),
+                        "Operador"
+                ),
+                new AumentarSalarioFuncionario.Output.Funcionario(
+                        "João",
+                        LocalDate.of(1990, 5, 12),
+                        new BigDecimal("2512.82"),
+                        "Operador"
+                )
+        )));
+        assertEquals(
+                "Maria | 18/10/2000 | 2.210,38 | Operador" + System.lineSeparator()
+                        + "João | 12/05/1990 | 2.512,82 | Operador" + System.lineSeparator(),
                 logger.mensagem
         );
     }

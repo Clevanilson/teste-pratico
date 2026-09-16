@@ -27,7 +27,16 @@ public class Funcionario extends Pessoa {
         if (salario.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Salário não pode ser negativo");
         }
-        this.salario = salario;
+        this.salario = salario.setScale(2, RoundingMode.HALF_UP);
+
+    }
+
+    public void aumentarSalario(double percentual) {
+        if (percentual < 0) {
+            throw new IllegalArgumentException("Percentual não pode ser negativo");
+        }
+        BigDecimal aumento = salario.multiply(BigDecimal.valueOf(percentual / 100));
+        setSalario(salario.add(aumento));
     }
 
     public BigDecimal getQuantidadeSalariosMinimos() {

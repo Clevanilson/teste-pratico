@@ -1,5 +1,6 @@
 package br.com.iniflex;
 
+import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
@@ -30,6 +31,7 @@ public class Iniflex {
                 new CadastrarFuncionario(funcionarioRepositorio),
                 new ExcluirFuncionario(funcionarioRepositorio),
                 new ListarFuncionarios(funcionarioRepositorio),
+                new AumentarSalarioFuncionario(funcionarioRepositorio),
                 new ListarFuncionariosPorFuncao(funcionarioRepositorio),
                 new ListarFuncionariosPorAniversario(funcionarioRepositorio),
                 new ListarFuncionarioMaisVelho(funcionarioRepositorio),
@@ -73,6 +75,12 @@ public class Iniflex {
         funcionarioControlador.listarFuncionarios(ordenacao);
     }
 
+    public void aumentarSalarioFuncionario() {
+        funcionarioControlador.aumentarSalarioFuncionario(
+                new AumentarSalarioFuncionario.Input(10)
+        );
+    }
+
     public void listarFuncionariosPorFuncao() {
         funcionarioControlador.listarFuncionariosPorFuncao();
     }
@@ -100,6 +108,7 @@ public class Iniflex {
         iniflex.cadastrarFuncionarios();
         iniflex.excluirFuncionarios();
         iniflex.listarFuncionarios();
+        iniflex.aumentarSalarioFuncionario();
         iniflex.listarFuncionariosPorFuncao();
         iniflex.listarFuncionariosPorAniversario();
         iniflex.listarFuncionarioMaisVelho();

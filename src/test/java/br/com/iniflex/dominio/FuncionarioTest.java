@@ -49,6 +49,20 @@ class FuncionarioTest {
     }
 
     @Test
+    void aumentarSalarioValido() {
+        Funcionario funcionario = new Funcionario(NOME, DATA_NASCIMENTO, SALARIO, FUNCAO);
+        funcionario.aumentarSalario(10);
+        assertEquals(new BigDecimal("2210.38"), funcionario.getSalario());
+    }
+
+    @Test
+    void aumentarSalarioInvalido() {
+        Funcionario funcionario = new Funcionario(NOME, DATA_NASCIMENTO, SALARIO, FUNCAO);
+        assertThrows(IllegalArgumentException.class, () -> funcionario.aumentarSalario(-1));
+        assertEquals(SALARIO, funcionario.getSalario());
+    }
+
+    @Test
     void quantidadeSalariosMinimos() {
         Funcionario funcionario = new Funcionario(NOME, DATA_NASCIMENTO, SALARIO, FUNCAO);
         assertEquals(new BigDecimal("1.66"), funcionario.getQuantidadeSalariosMinimos());

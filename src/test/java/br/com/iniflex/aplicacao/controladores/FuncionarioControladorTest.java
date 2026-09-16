@@ -1,5 +1,6 @@
 package br.com.iniflex.aplicacao.controladores;
 
+import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
@@ -38,6 +39,7 @@ class FuncionarioControladorTest {
                 new CadastrarFuncionario(repositorio),
                 new ExcluirFuncionario(repositorio),
                 new ListarFuncionarios(repositorio),
+                new AumentarSalarioFuncionario(repositorio),
                 new ListarFuncionariosPorFuncao(repositorio),
                 new ListarFuncionariosPorAniversario(repositorio),
                 new ListarFuncionarioMaisVelho(repositorio),
@@ -113,6 +115,36 @@ class FuncionarioControladorTest {
     void listandoVazio() {
         controlador.listarFuncionarios();
         assertEquals("OK: Funcionários listados" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void aumentandoSalarioValido() {
+        controlador.cadastrarFuncionario(maria);
+        controlador.cadastrarFuncionario(new CadastrarFuncionario.Input(
+                "João",
+                LocalDate.of(1990, 5, 12),
+                new BigDecimal("2284.38"),
+                "Operador"
+        ));
+        logger.mensagem = "";
+        controlador.aumentarSalarioFuncionario(new AumentarSalarioFuncionario.Input(10));
+        assertEquals(new BigDecimal("2210.38"), repositorio.listar().get(0).getSalario());
+        assertEquals(new BigDecimal("2512.82"), repositorio.listar().get(1).getSalario());
+        assertEquals(
+                "OK: Salário de funcionários aumentado" + System.lineSeparator()
+                        + "Maria | 18/10/2000 | 2.210,38 | Operador" + System.lineSeparator()
+                        + "João | 12/05/1990 | 2.512,82 | Operador" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void aumentandoSalarioInvalido() {
+        controlador.cadastrarFuncionario(maria);
+        logger.mensagem = "";
+        controlador.aumentarSalarioFuncionario(null);
+        assertEquals(maria.salario(), repositorio.listar().get(0).getSalario());
+        assertEquals("ERRO: Entrada não pode ser nula" + System.lineSeparator(), logger.mensagem);
     }
 
     @Test

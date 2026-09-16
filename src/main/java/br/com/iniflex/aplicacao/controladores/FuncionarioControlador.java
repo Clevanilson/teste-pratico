@@ -1,5 +1,6 @@
 package br.com.iniflex.aplicacao.controladores;
 
+import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarioMaisVelho;
@@ -14,6 +15,7 @@ public class FuncionarioControlador {
     private final CadastrarFuncionario cadastrarFuncionario;
     private final ExcluirFuncionario excluirFuncionario;
     private final ListarFuncionarios listarFuncionarios;
+    private final AumentarSalarioFuncionario aumentarSalarioFuncionario;
     private final ListarFuncionariosPorFuncao listarFuncionariosPorFuncao;
     private final ListarFuncionariosPorAniversario listarFuncionariosPorAniversario;
     private final ListarFuncionarioMaisVelho listarFuncionarioMaisVelho;
@@ -24,6 +26,7 @@ public class FuncionarioControlador {
             CadastrarFuncionario cadastrarFuncionario,
             ExcluirFuncionario excluirFuncionario,
             ListarFuncionarios listarFuncionarios,
+            AumentarSalarioFuncionario aumentarSalarioFuncionario,
             ListarFuncionariosPorFuncao listarFuncionariosPorFuncao,
             ListarFuncionariosPorAniversario listarFuncionariosPorAniversario,
             ListarFuncionarioMaisVelho listarFuncionarioMaisVelho,
@@ -33,6 +36,7 @@ public class FuncionarioControlador {
         this.cadastrarFuncionario = cadastrarFuncionario;
         this.excluirFuncionario = excluirFuncionario;
         this.listarFuncionarios = listarFuncionarios;
+        this.aumentarSalarioFuncionario = aumentarSalarioFuncionario;
         this.listarFuncionariosPorFuncao = listarFuncionariosPorFuncao;
         this.listarFuncionariosPorAniversario = listarFuncionariosPorAniversario;
         this.listarFuncionarioMaisVelho = listarFuncionarioMaisVelho;
@@ -78,6 +82,19 @@ public class FuncionarioControlador {
         } catch (RuntimeException e) {
             String mensagem = e.getMessage() == null || e.getMessage().isBlank()
                     ? "Falha ao listar funcionários"
+                    : e.getMessage();
+            funcionarioView.toast(false, mensagem);
+        }
+    }
+
+    public void aumentarSalarioFuncionario(AumentarSalarioFuncionario.Input input) {
+        try {
+            AumentarSalarioFuncionario.Output output = aumentarSalarioFuncionario.executar(input);
+            funcionarioView.toast(true, "Salário de funcionários aumentado");
+            funcionarioView.exibir(output);
+        } catch (RuntimeException e) {
+            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
+                    ? "Falha ao aumentar salário de funcionários"
                     : e.getMessage();
             funcionarioView.toast(false, mensagem);
         }
