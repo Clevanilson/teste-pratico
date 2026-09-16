@@ -2,6 +2,7 @@ package br.com.iniflex;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.controladores.FuncionarioControlador;
 import br.com.iniflex.aplicacao.repositorio.FuncionarioRepositorio;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
@@ -20,6 +21,7 @@ public class Iniflex {
         this.funcionarioControlador = new FuncionarioControlador(
                 new CadastrarFuncionario(funcionarioRepositorio),
                 new ExcluirFuncionario(funcionarioRepositorio),
+                new ListarFuncionarios(funcionarioRepositorio),
                 new FuncionarioView(new PrintfLogger())
         );
     }
@@ -51,6 +53,10 @@ public class Iniflex {
         }
     }
 
+    public void listarFuncionarios() {
+        funcionarioControlador.listarFuncionarios();
+    }
+
     public String mensagem() {
         return "Hello World";
     }
@@ -59,5 +65,6 @@ public class Iniflex {
         Iniflex iniflex = new Iniflex();
         iniflex.cadastrarFuncionarios();
         iniflex.excluirFuncionarios();
+        iniflex.listarFuncionarios();
     }
 }

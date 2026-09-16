@@ -2,6 +2,7 @@ package br.com.iniflex.aplicacao.controladores;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.views.FuncionarioView;
 import br.com.iniflex.dominio.Funcionario;
 import br.com.iniflex.infra.repositorio.FuncionarioMemoriaRepositorio;
@@ -28,6 +29,7 @@ class FuncionarioControladorTest {
         controlador = new FuncionarioControlador(
                 new CadastrarFuncionario(repositorio),
                 new ExcluirFuncionario(repositorio),
+                new ListarFuncionarios(repositorio),
                 new FuncionarioView(logger)
         );
         maria = new CadastrarFuncionario.Input("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador");
@@ -74,5 +76,30 @@ class FuncionarioControladorTest {
         controlador.excluirFuncionario(null);
         assertEquals(0, repositorio.listar().size());
         assertEquals("ERRO: Entrada não pode ser nula" + System.lineSeparator(), logger.mensagem);
+    }
+
+    @Test
+    void listandoValido() {
+        controlador.cadastrarFuncionario(maria);
+        controlador.cadastrarFuncionario(new CadastrarFuncionario.Input(
+                "João",
+                LocalDate.of(1990, 5, 12),
+                new BigDecimal("2284.38"),
+                "Operador"
+        ));
+        logger.mensagem = "";
+        controlador.listarFuncionarios();
+        assertEquals(
+                "OK: Funcionários listados" + System.lineSeparator()
+                        + "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
+                        + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator(),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void listandoVazio() {
+        controlador.listarFuncionarios();
+        assertEquals("OK: Funcionários listados" + System.lineSeparator(), logger.mensagem);
     }
 }

@@ -2,6 +2,7 @@ package br.com.iniflex.aplicacao.views;
 
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.ExcluirFuncionario;
+import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.servico.Logger;
 
 import java.math.BigDecimal;
@@ -34,6 +35,18 @@ public class FuncionarioView {
             throw new IllegalArgumentException("Funcionário não pode ser nulo");
         }
         exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+    }
+
+    public void exibir(ListarFuncionarios.Output funcionarios) {
+        if (funcionarios == null || funcionarios.funcionarios() == null) {
+            throw new IllegalArgumentException("Funcionários não podem ser nulos");
+        }
+        for (ListarFuncionarios.Output.Funcionario funcionario : funcionarios.funcionarios()) {
+            if (funcionario == null) {
+                throw new IllegalArgumentException("Funcionário não pode ser nulo");
+            }
+            exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+        }
     }
 
     public void toast(boolean sucesso, String mensagem) {
