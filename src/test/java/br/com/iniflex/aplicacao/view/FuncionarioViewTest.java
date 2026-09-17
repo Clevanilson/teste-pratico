@@ -1,4 +1,4 @@
-package br.com.iniflex.aplicacao.views;
+package br.com.iniflex.aplicacao.view;
 
 import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
@@ -8,6 +8,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
+import br.com.iniflex.aplicacao.casodeuso.ListarTotalSalarios;
 import br.com.iniflex.infra.servico.LoggerFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,6 +62,8 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarFuncionarioMaisVelho.Output(null)));
         assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarQuantidadeSalariosMinimos.Output) null));
         assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarQuantidadeSalariosMinimos.Output(null)));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir((ListarTotalSalarios.Output) null));
+        assertThrows(IllegalArgumentException.class, () -> view.exibir(new ListarTotalSalarios.Output(null)));
     }
 
     @Test
@@ -220,6 +223,18 @@ class FuncionarioViewTest {
                         "Nome  | Salários Mínimos",
                         "Maria | 1,66            ",
                         "João  | 1,89            "
+                ),
+                logger.mensagem
+        );
+    }
+
+    @Test
+    void exibindoTotalSalarios() {
+        view.exibir(new ListarTotalSalarios.Output(new BigDecimal("4293.82")));
+        assertEquals(
+                tabela(
+                        "Total   ",
+                        "4.293,82"
                 ),
                 logger.mensagem
         );

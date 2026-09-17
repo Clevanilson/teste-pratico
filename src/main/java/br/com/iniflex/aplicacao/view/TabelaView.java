@@ -1,4 +1,4 @@
-package br.com.iniflex.aplicacao.views;
+package br.com.iniflex.aplicacao.view;
 
 import br.com.iniflex.aplicacao.servico.Logger;
 

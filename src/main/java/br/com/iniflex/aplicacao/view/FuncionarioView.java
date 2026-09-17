@@ -1,4 +1,4 @@
-package br.com.iniflex.aplicacao.views;
+package br.com.iniflex.aplicacao.view;
 
 import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
@@ -8,6 +8,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
+import br.com.iniflex.aplicacao.casodeuso.ListarTotalSalarios;
 import br.com.iniflex.aplicacao.servico.Logger;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ public class FuncionarioView {
     private static final List<String> CABECALHO_FUNCIONARIO = List.of("Nome", "Data Nascimento", "Salário", "Função");
     private static final List<String> CABECALHO_IDADE = List.of("Nome", "Idade");
     private static final List<String> CABECALHO_SALARIOS_MINIMOS = List.of("Nome", "Salários Mínimos");
+    private static final List<String> CABECALHO_TOTAL = List.of("Total");
 
     private final Logger logger;
     private final TabelaView tabelaView;
@@ -153,6 +155,13 @@ public class FuncionarioView {
             linhas.add(List.of(funcionario.nome(), String.valueOf(funcionario.idade())));
         }
         tabelaView.exibir(CABECALHO_IDADE, linhas);
+    }
+
+    public void exibir(ListarTotalSalarios.Output total) {
+        if (total == null || total.total() == null) {
+            throw new IllegalArgumentException("Total não pode ser nulo");
+        }
+        tabelaView.exibir(CABECALHO_TOTAL, List.of(List.of(formatoSalario.format(total.total()))));
     }
 
     public void exibir(ListarQuantidadeSalariosMinimos.Output funcionarios) {

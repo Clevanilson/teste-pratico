@@ -1,4 +1,4 @@
-package br.com.iniflex.aplicacao.views;
+package br.com.iniflex.aplicacao.view;
 
 import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
@@ -8,6 +8,7 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
+import br.com.iniflex.aplicacao.casodeuso.ListarTotalSalarios;
 import br.com.iniflex.infra.servico.LoggerFake;
 
 import java.util.ArrayList;
@@ -81,6 +82,11 @@ public class FuncionarioViewFake extends FuncionarioView {
     @Override
     public void exibir(ListarQuantidadeSalariosMinimos.Output funcionarios) {
         registrar("exibir", funcionarios);
+    }
+
+    @Override
+    public void exibir(ListarTotalSalarios.Output total) {
+        registrar("exibir", total);
     }
 
     private void registrar(String metodo, Object... argumentos) {

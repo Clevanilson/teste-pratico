@@ -1,4 +1,4 @@
-package br.com.iniflex.aplicacao.controladores;
+package br.com.iniflex.aplicacao.controller;
 
 import br.com.iniflex.aplicacao.casodeuso.AumentarSalarioFuncionario;
 import br.com.iniflex.aplicacao.casodeuso.CadastrarFuncionario;
@@ -8,8 +8,9 @@ import br.com.iniflex.aplicacao.casodeuso.ListarFuncionarios;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorAniversario;
 import br.com.iniflex.aplicacao.casodeuso.ListarFuncionariosPorFuncao;
 import br.com.iniflex.aplicacao.casodeuso.ListarQuantidadeSalariosMinimos;
-import br.com.iniflex.aplicacao.views.FuncionarioViewFake;
-import br.com.iniflex.aplicacao.views.FuncionarioViewFake.Chamada;
+import br.com.iniflex.aplicacao.casodeuso.ListarTotalSalarios;
+import br.com.iniflex.aplicacao.view.FuncionarioViewFake;
+import br.com.iniflex.aplicacao.view.FuncionarioViewFake.Chamada;
 import br.com.iniflex.dominio.Campo;
 import br.com.iniflex.dominio.Direcao;
 import br.com.iniflex.dominio.Funcionario;
@@ -58,7 +59,7 @@ class FuncionarioControladorTest {
         assertEquals(maria.funcao(), funcionarios.get(0).getFuncao());
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionário cadastrado"),
+                        new Chamada("toast", true, "3.1 - Funcionário cadastrado"),
                         new Chamada("exibir", new CadastrarFuncionario.Output(
                                 maria.nome(),
                                 maria.dataNascimento(),
@@ -75,7 +76,7 @@ class FuncionarioControladorTest {
         controlador.cadastrarFuncionario(null);
         assertEquals(0, repositorio.listar().size());
         assertEquals(
-                List.of(new Chamada("toast", false, "Entrada não pode ser nula")),
+                List.of(new Chamada("toast", false, "3.1 - Entrada não pode ser nula")),
                 view.chamadas()
         );
     }
@@ -88,7 +89,7 @@ class FuncionarioControladorTest {
         assertEquals(0, repositorio.listar().size());
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionário excluído"),
+                        new Chamada("toast", true, "3.2 - Funcionário excluído"),
                         new Chamada("exibir", new ExcluirFuncionario.Output(
                                 maria.nome(),
                                 maria.dataNascimento(),
@@ -105,7 +106,7 @@ class FuncionarioControladorTest {
         controlador.excluirFuncionario(null);
         assertEquals(0, repositorio.listar().size());
         assertEquals(
-                List.of(new Chamada("toast", false, "Entrada não pode ser nula")),
+                List.of(new Chamada("toast", false, "3.2 - Entrada não pode ser nula")),
                 view.chamadas()
         );
     }
@@ -118,7 +119,7 @@ class FuncionarioControladorTest {
         controlador.listarFuncionarios();
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionários listados"),
+                        new Chamada("toast", true, "3.3 - Funcionários listados"),
                         new Chamada("exibir", new ListarFuncionarios.Output(List.of(
                                 new ListarFuncionarios.Output.Funcionario(
                                         maria.nome(),
@@ -143,7 +144,7 @@ class FuncionarioControladorTest {
         controlador.listarFuncionarios();
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionários listados"),
+                        new Chamada("toast", true, "3.3 - Funcionários listados"),
                         new Chamada("exibir", new ListarFuncionarios.Output(List.of()))
                 ),
                 view.chamadas()
@@ -160,7 +161,7 @@ class FuncionarioControladorTest {
         assertEquals(new BigDecimal("2512.82"), repositorio.listar().get(1).getSalario());
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Salário de funcionários aumentado"),
+                        new Chamada("toast", true, "3.4 - Salário de funcionários aumentado"),
                         new Chamada("exibir", new AumentarSalarioFuncionario.Output(List.of(
                                 new AumentarSalarioFuncionario.Output.Funcionario(
                                         maria.nome(),
@@ -187,7 +188,7 @@ class FuncionarioControladorTest {
         controlador.aumentarSalarioFuncionario(null);
         assertEquals(maria.salario(), repositorio.listar().get(0).getSalario());
         assertEquals(
-                List.of(new Chamada("toast", false, "Entrada não pode ser nula")),
+                List.of(new Chamada("toast", false, "3.4 - Entrada não pode ser nula")),
                 view.chamadas()
         );
     }
@@ -224,7 +225,8 @@ class FuncionarioControladorTest {
         ));
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionários listados por função"),
+                        new Chamada("toast", true, "3.5 - Funcionários agrupados por função"),
+                        new Chamada("toast", true, "3.6 - Funcionários listados por função"),
                         new Chamada("exibir", new ListarFuncionariosPorFuncao.Output(funcionariosPorFuncao))
                 ),
                 view.chamadas()
@@ -236,7 +238,8 @@ class FuncionarioControladorTest {
         controlador.listarFuncionariosPorFuncao();
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionários listados por função"),
+                        new Chamada("toast", true, "3.5 - Funcionários agrupados por função"),
+                        new Chamada("toast", true, "3.6 - Funcionários listados por função"),
                         new Chamada("exibir", new ListarFuncionariosPorFuncao.Output(Map.of()))
                 ),
                 view.chamadas()
@@ -252,7 +255,7 @@ class FuncionarioControladorTest {
         controlador.listarFuncionariosPorAniversario(new ListarFuncionariosPorAniversario.Input(List.of(10, 12)));
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionários listados por aniversário"),
+                        new Chamada("toast", true, "3.8 - Funcionários listados por aniversário"),
                         new Chamada("exibir", new ListarFuncionariosPorAniversario.Output(List.of(
                                 new ListarFuncionariosPorAniversario.Output.Funcionario(
                                         maria.nome(),
@@ -277,7 +280,7 @@ class FuncionarioControladorTest {
         controlador.listarFuncionariosPorAniversario(new ListarFuncionariosPorAniversario.Input(List.of(10, 12)));
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionários listados por aniversário"),
+                        new Chamada("toast", true, "3.8 - Funcionários listados por aniversário"),
                         new Chamada("exibir", new ListarFuncionariosPorAniversario.Output(List.of()))
                 ),
                 view.chamadas()
@@ -288,7 +291,7 @@ class FuncionarioControladorTest {
     void listandoPorAniversarioInvalido() {
         controlador.listarFuncionariosPorAniversario(null);
         assertEquals(
-                List.of(new Chamada("toast", false, "Entrada não pode ser nula")),
+                List.of(new Chamada("toast", false, "3.8 - Entrada não pode ser nula")),
                 view.chamadas()
         );
     }
@@ -302,7 +305,7 @@ class FuncionarioControladorTest {
         int idade = Period.between(caio.dataNascimento(), LocalDate.now()).getYears();
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionário mais velho listado"),
+                        new Chamada("toast", true, "3.9 - Funcionário mais velho listado"),
                         new Chamada("exibir", new ListarFuncionarioMaisVelho.Output(List.of(
                                 new ListarFuncionarioMaisVelho.Output.Funcionario(caio.nome(), idade)
                         )))
@@ -316,7 +319,7 @@ class FuncionarioControladorTest {
         controlador.listarFuncionarioMaisVelho();
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionário mais velho listado"),
+                        new Chamada("toast", true, "3.9 - Funcionário mais velho listado"),
                         new Chamada("exibir", new ListarFuncionarioMaisVelho.Output(List.of()))
                 ),
                 view.chamadas()
@@ -331,7 +334,7 @@ class FuncionarioControladorTest {
         controlador.listarQuantidadeSalariosMinimos();
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Quantidade de salários mínimos listada"),
+                        new Chamada("toast", true, "3.12 - Quantidade de salários mínimos listada"),
                         new Chamada("exibir", new ListarQuantidadeSalariosMinimos.Output(List.of(
                                 new ListarQuantidadeSalariosMinimos.Output.Funcionario(maria.nome(), new BigDecimal("1.66")),
                                 new ListarQuantidadeSalariosMinimos.Output.Funcionario(joao.nome(), new BigDecimal("1.88"))
@@ -346,7 +349,7 @@ class FuncionarioControladorTest {
         controlador.listarQuantidadeSalariosMinimos();
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Quantidade de salários mínimos listada"),
+                        new Chamada("toast", true, "3.12 - Quantidade de salários mínimos listada"),
                         new Chamada("exibir", new ListarQuantidadeSalariosMinimos.Output(List.of()))
                 ),
                 view.chamadas()
@@ -362,7 +365,7 @@ class FuncionarioControladorTest {
         controlador.listarFuncionarios(new Ordenacao(Campo.NOME, Direcao.CRESCENTE));
         assertEquals(
                 List.of(
-                        new Chamada("toast", true, "Funcionários listados"),
+                        new Chamada("toast", true, "3.10 - Funcionários listados"),
                         new Chamada("exibir", new ListarFuncionarios.Output(List.of(
                                 new ListarFuncionarios.Output.Funcionario(
                                         caio.nome(),
@@ -389,6 +392,33 @@ class FuncionarioControladorTest {
     }
 
     @Test
+    void listandoTotalSalariosValido() {
+        controlador.cadastrarFuncionario(maria);
+        controlador.cadastrarFuncionario(joao);
+        view.limpar();
+        controlador.listarTotalSalarios();
+        assertEquals(
+                List.of(
+                        new Chamada("toast", true, "3.11 - Total de salários listado"),
+                        new Chamada("exibir", new ListarTotalSalarios.Output(new BigDecimal("4293.82")))
+                ),
+                view.chamadas()
+        );
+    }
+
+    @Test
+    void listandoTotalSalariosVazio() {
+        controlador.listarTotalSalarios();
+        assertEquals(
+                List.of(
+                        new Chamada("toast", true, "3.11 - Total de salários listado"),
+                        new Chamada("exibir", new ListarTotalSalarios.Output(new BigDecimal("0.00")))
+                ),
+                view.chamadas()
+        );
+    }
+
+    @Test
     void tratandoErroSemMensagem() {
         controlador = controladorComRepositorio(new FuncionarioMemoriaRepositorio() {
             @Override
@@ -398,7 +428,7 @@ class FuncionarioControladorTest {
         });
         controlador.cadastrarFuncionario(maria);
         assertEquals(
-                List.of(new Chamada("toast", false, "Erro inesperado")),
+                List.of(new Chamada("toast", false, "3.1 - Erro inesperado")),
                 view.chamadas()
         );
     }
@@ -413,7 +443,7 @@ class FuncionarioControladorTest {
         });
         controlador.cadastrarFuncionario(maria);
         assertEquals(
-                List.of(new Chamada("toast", false, "Erro inesperado")),
+                List.of(new Chamada("toast", false, "3.1 - Erro inesperado")),
                 view.chamadas()
         );
     }
@@ -427,6 +457,7 @@ class FuncionarioControladorTest {
                 new ListarFuncionariosPorFuncao(repositorio),
                 new ListarFuncionariosPorAniversario(repositorio),
                 new ListarFuncionarioMaisVelho(repositorio),
+                new ListarTotalSalarios(repositorio),
                 new ListarQuantidadeSalariosMinimos(repositorio),
                 view
         );
