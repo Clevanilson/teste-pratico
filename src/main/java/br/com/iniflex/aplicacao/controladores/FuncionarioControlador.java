@@ -12,6 +12,8 @@ import br.com.iniflex.aplicacao.views.FuncionarioView;
 import br.com.iniflex.dominio.Ordenacao;
 
 public class FuncionarioControlador {
+    private static final String ERRO_INESPERADO = "Erro inesperado";
+
     private final CadastrarFuncionario cadastrarFuncionario;
     private final ExcluirFuncionario excluirFuncionario;
     private final ListarFuncionarios listarFuncionarios;
@@ -45,29 +47,19 @@ public class FuncionarioControlador {
     }
 
     public void cadastrarFuncionario(CadastrarFuncionario.Input input) {
-        try {
+        executar(() -> {
             CadastrarFuncionario.Output output = cadastrarFuncionario.executar(input);
             funcionarioView.toast(true, "Funcionário cadastrado");
             funcionarioView.exibir(output);
-        } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao cadastrar funcionário"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
-        }
+        });
     }
 
     public void excluirFuncionario(ExcluirFuncionario.Input input) {
-        try {
+        executar(() -> {
             ExcluirFuncionario.Output output = excluirFuncionario.executar(input);
             funcionarioView.toast(true, "Funcionário excluído");
             funcionarioView.exibir(output);
-        } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao excluir funcionário"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
-        }
+        });
     }
 
     public void listarFuncionarios() {
@@ -75,80 +67,63 @@ public class FuncionarioControlador {
     }
 
     public void listarFuncionarios(Ordenacao ordenacao) {
-        try {
+        executar(() -> {
             ListarFuncionarios.Output output = listarFuncionarios.executar(ordenacao);
             funcionarioView.toast(true, "Funcionários listados");
             funcionarioView.exibir(output);
-        } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao listar funcionários"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
-        }
+        });
     }
 
     public void aumentarSalarioFuncionario(AumentarSalarioFuncionario.Input input) {
-        try {
+        executar(() -> {
             AumentarSalarioFuncionario.Output output = aumentarSalarioFuncionario.executar(input);
             funcionarioView.toast(true, "Salário de funcionários aumentado");
             funcionarioView.exibir(output);
-        } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao aumentar salário de funcionários"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
-        }
+        });
     }
 
     public void listarFuncionariosPorFuncao() {
-        try {
+        executar(() -> {
             ListarFuncionariosPorFuncao.Output output = listarFuncionariosPorFuncao.executar();
             funcionarioView.toast(true, "Funcionários listados por função");
             funcionarioView.exibir(output);
-        } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao listar funcionários por função"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
-        }
+        });
     }
 
     public void listarFuncionariosPorAniversario(ListarFuncionariosPorAniversario.Input input) {
-        try {
+        executar(() -> {
             ListarFuncionariosPorAniversario.Output output = listarFuncionariosPorAniversario.executar(input);
             funcionarioView.toast(true, "Funcionários listados por aniversário");
             funcionarioView.exibir(output);
-        } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao listar funcionários por aniversário"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
-        }
+        });
     }
 
     public void listarFuncionarioMaisVelho() {
-        try {
+        executar(() -> {
             ListarFuncionarioMaisVelho.Output output = listarFuncionarioMaisVelho.executar();
             funcionarioView.toast(true, "Funcionário mais velho listado");
             funcionarioView.exibir(output);
-        } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao listar funcionário mais velho"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
-        }
+        });
     }
 
     public void listarQuantidadeSalariosMinimos() {
-        try {
+        executar(() -> {
             ListarQuantidadeSalariosMinimos.Output output = listarQuantidadeSalariosMinimos.executar();
             funcionarioView.toast(true, "Quantidade de salários mínimos listada");
             funcionarioView.exibir(output);
+        });
+    }
+
+    private void executar(Runnable acao) {
+        try {
+            acao.run();
         } catch (RuntimeException e) {
-            String mensagem = e.getMessage() == null || e.getMessage().isBlank()
-                    ? "Falha ao listar quantidade de salários mínimos"
-                    : e.getMessage();
-            funcionarioView.toast(false, mensagem);
+            funcionarioView.toast(false, mensagemErro(e));
         }
+    }
+
+    private String mensagemErro(RuntimeException e) {
+        String mensagem = e.getMessage();
+        return mensagem == null || mensagem.isBlank() ? ERRO_INESPERADO : mensagem;
     }
 }

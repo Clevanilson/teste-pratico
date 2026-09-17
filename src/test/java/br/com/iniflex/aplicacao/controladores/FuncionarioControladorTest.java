@@ -40,17 +40,7 @@ class FuncionarioControladorTest {
     void setUp() {
         repositorio = new FuncionarioMemoriaRepositorio();
         view = new FuncionarioViewFake();
-        controlador = new FuncionarioControlador(
-                new CadastrarFuncionario(repositorio),
-                new ExcluirFuncionario(repositorio),
-                new ListarFuncionarios(repositorio),
-                new AumentarSalarioFuncionario(repositorio),
-                new ListarFuncionariosPorFuncao(repositorio),
-                new ListarFuncionariosPorAniversario(repositorio),
-                new ListarFuncionarioMaisVelho(repositorio),
-                new ListarQuantidadeSalariosMinimos(repositorio),
-                view
-        );
+        controlador = controladorComRepositorio(repositorio);
         maria = new CadastrarFuncionario.Input("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador");
         joao = new CadastrarFuncionario.Input("João", LocalDate.of(1990, 5, 12), new BigDecimal("2284.38"), "Operador");
         caio = new CadastrarFuncionario.Input("Caio", LocalDate.of(1961, 5, 2), new BigDecimal("9836.14"), "Coordenador");
@@ -395,6 +385,50 @@ class FuncionarioControladorTest {
                         )))
                 ),
                 view.chamadas()
+        );
+    }
+
+    @Test
+    void tratandoErroSemMensagem() {
+        controlador = controladorComRepositorio(new FuncionarioMemoriaRepositorio() {
+            @Override
+            public void salvar(Funcionario funcionario) {
+                throw new RuntimeException();
+            }
+        });
+        controlador.cadastrarFuncionario(maria);
+        assertEquals(
+                List.of(new Chamada("toast", false, "Erro inesperado")),
+                view.chamadas()
+        );
+    }
+
+    @Test
+    void tratandoErroComMensagemEmBranco() {
+        controlador = controladorComRepositorio(new FuncionarioMemoriaRepositorio() {
+            @Override
+            public void salvar(Funcionario funcionario) {
+                throw new RuntimeException("   ");
+            }
+        });
+        controlador.cadastrarFuncionario(maria);
+        assertEquals(
+                List.of(new Chamada("toast", false, "Erro inesperado")),
+                view.chamadas()
+        );
+    }
+
+    private FuncionarioControlador controladorComRepositorio(FuncionarioMemoriaRepositorio repositorio) {
+        return new FuncionarioControlador(
+                new CadastrarFuncionario(repositorio),
+                new ExcluirFuncionario(repositorio),
+                new ListarFuncionarios(repositorio),
+                new AumentarSalarioFuncionario(repositorio),
+                new ListarFuncionariosPorFuncao(repositorio),
+                new ListarFuncionariosPorAniversario(repositorio),
+                new ListarFuncionarioMaisVelho(repositorio),
+                new ListarQuantidadeSalariosMinimos(repositorio),
+                view
         );
     }
 }
