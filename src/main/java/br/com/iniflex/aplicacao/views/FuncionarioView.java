@@ -15,18 +15,24 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class FuncionarioView {
     private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final List<String> CABECALHO_FUNCIONARIO = List.of("Nome", "Data Nascimento", "Salário", "Função");
+    private static final List<String> CABECALHO_IDADE = List.of("Nome", "Idade");
+    private static final List<String> CABECALHO_SALARIOS_MINIMOS = List.of("Nome", "Salários Mínimos");
 
     private final Logger logger;
+    private final TabelaView tabelaView;
     private final DecimalFormat formatoSalario;
 
     public FuncionarioView(Logger logger) {
         this.logger = logger;
+        this.tabelaView = new TabelaView(logger);
         this.formatoSalario = criarFormatoSalario();
     }
 
@@ -34,38 +40,62 @@ public class FuncionarioView {
         if (funcionario == null) {
             throw new IllegalArgumentException("Funcionário não pode ser nulo");
         }
-        exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+        tabelaView.exibir(CABECALHO_FUNCIONARIO, List.of(linhaFuncionario(
+                funcionario.nome(),
+                funcionario.dataNascimento(),
+                funcionario.salario(),
+                funcionario.funcao()
+        )));
     }
 
     public void exibir(ExcluirFuncionario.Output funcionario) {
         if (funcionario == null) {
             throw new IllegalArgumentException("Funcionário não pode ser nulo");
         }
-        exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+        tabelaView.exibir(CABECALHO_FUNCIONARIO, List.of(linhaFuncionario(
+                funcionario.nome(),
+                funcionario.dataNascimento(),
+                funcionario.salario(),
+                funcionario.funcao()
+        )));
     }
 
     public void exibir(ListarFuncionarios.Output funcionarios) {
         if (funcionarios == null || funcionarios.funcionarios() == null) {
             throw new IllegalArgumentException("Funcionários não podem ser nulos");
         }
+        List<List<String>> linhas = new ArrayList<>();
         for (ListarFuncionarios.Output.Funcionario funcionario : funcionarios.funcionarios()) {
             if (funcionario == null) {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
-            exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+            linhas.add(linhaFuncionario(
+                    funcionario.nome(),
+                    funcionario.dataNascimento(),
+                    funcionario.salario(),
+                    funcionario.funcao()
+            ));
         }
+        tabelaView.exibir(CABECALHO_FUNCIONARIO, linhas);
     }
 
     public void exibir(AumentarSalarioFuncionario.Output funcionarios) {
         if (funcionarios == null || funcionarios.funcionarios() == null) {
             throw new IllegalArgumentException("Funcionários não podem ser nulos");
         }
+        List<List<String>> linhas = new ArrayList<>();
         for (AumentarSalarioFuncionario.Output.Funcionario funcionario : funcionarios.funcionarios()) {
             if (funcionario == null) {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
-            exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+            linhas.add(linhaFuncionario(
+                    funcionario.nome(),
+                    funcionario.dataNascimento(),
+                    funcionario.salario(),
+                    funcionario.funcao()
+            ));
         }
+        tabelaView.exibir(CABECALHO_FUNCIONARIO, linhas);
     }
 
     public void exibir(ListarFuncionariosPorFuncao.Output funcionarios) {
@@ -76,13 +106,19 @@ public class FuncionarioView {
             if (grupo.getKey() == null || grupo.getKey().isBlank() || grupo.getValue() == null) {
                 throw new IllegalArgumentException("Funcionários não podem ser nulos");
             }
-            logger.log("%s%n", grupo.getKey());
+            List<List<String>> linhas = new ArrayList<>();
             for (ListarFuncionariosPorFuncao.Output.Funcionario funcionario : grupo.getValue()) {
                 if (funcionario == null) {
                     throw new IllegalArgumentException("Funcionário não pode ser nulo");
                 }
-                exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+                linhas.add(linhaFuncionario(
+                        funcionario.nome(),
+                        funcionario.dataNascimento(),
+                        funcionario.salario(),
+                        funcionario.funcao()
+                ));
             }
+            tabelaView.exibir(grupo.getKey(), CABECALHO_FUNCIONARIO, linhas);
         }
     }
 
@@ -90,40 +126,50 @@ public class FuncionarioView {
         if (funcionarios == null || funcionarios.funcionarios() == null) {
             throw new IllegalArgumentException("Funcionários não podem ser nulos");
         }
+        List<List<String>> linhas = new ArrayList<>();
         for (ListarFuncionariosPorAniversario.Output.Funcionario funcionario : funcionarios.funcionarios()) {
             if (funcionario == null) {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
-            exibir(funcionario.nome(), funcionario.dataNascimento(), funcionario.salario(), funcionario.funcao());
+            linhas.add(linhaFuncionario(
+                    funcionario.nome(),
+                    funcionario.dataNascimento(),
+                    funcionario.salario(),
+                    funcionario.funcao()
+            ));
         }
+        tabelaView.exibir(CABECALHO_FUNCIONARIO, linhas);
     }
 
     public void exibir(ListarFuncionarioMaisVelho.Output funcionarios) {
         if (funcionarios == null || funcionarios.funcionarios() == null) {
             throw new IllegalArgumentException("Funcionários não podem ser nulos");
         }
+        List<List<String>> linhas = new ArrayList<>();
         for (ListarFuncionarioMaisVelho.Output.Funcionario funcionario : funcionarios.funcionarios()) {
             if (funcionario == null) {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
-            logger.log("%s | %d%n", funcionario.nome(), funcionario.idade());
+            linhas.add(List.of(funcionario.nome(), String.valueOf(funcionario.idade())));
         }
+        tabelaView.exibir(CABECALHO_IDADE, linhas);
     }
 
     public void exibir(ListarQuantidadeSalariosMinimos.Output funcionarios) {
         if (funcionarios == null || funcionarios.funcionarios() == null) {
             throw new IllegalArgumentException("Funcionários não podem ser nulos");
         }
+        List<List<String>> linhas = new ArrayList<>();
         for (ListarQuantidadeSalariosMinimos.Output.Funcionario funcionario : funcionarios.funcionarios()) {
             if (funcionario == null) {
                 throw new IllegalArgumentException("Funcionário não pode ser nulo");
             }
-            logger.log(
-                    "%s | %s%n",
+            linhas.add(List.of(
                     funcionario.nome(),
                     formatoSalario.format(funcionario.quantidadeSalariosMinimos())
-            );
+            ));
         }
+        tabelaView.exibir(CABECALHO_SALARIOS_MINIMOS, linhas);
     }
 
     public void toast(boolean sucesso, String mensagem) {
@@ -133,9 +179,8 @@ public class FuncionarioView {
         logger.log("%s: %s%n", sucesso ? "OK" : "ERRO", mensagem.trim());
     }
 
-    private void exibir(String nome, LocalDate dataNascimento, BigDecimal salario, String funcao) {
-        logger.log(
-                "%s | %s | %s | %s%n",
+    private List<String> linhaFuncionario(String nome, LocalDate dataNascimento, BigDecimal salario, String funcao) {
+        return List.of(
                 nome,
                 dataNascimento.format(FORMATO_DATA),
                 formatoSalario.format(salario),

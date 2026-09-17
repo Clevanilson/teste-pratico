@@ -36,7 +36,13 @@ class FuncionarioViewTest {
     @Test
     void exibindoFuncionario() {
         view.exibir(maria);
-        assertEquals("Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator(), logger.mensagem);
+        assertEquals(
+                tabela(
+                        "Nome  | Data Nascimento | Salário  | Função  ",
+                        "Maria | 18/10/2000      | 2.009,44 | Operador"
+                ),
+                logger.mensagem
+        );
     }
 
     @Test
@@ -60,7 +66,13 @@ class FuncionarioViewTest {
     @Test
     void exibindoFuncionarioExcluido() {
         view.exibir(new ExcluirFuncionario.Output("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador"));
-        assertEquals("Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator(), logger.mensagem);
+        assertEquals(
+                tabela(
+                        "Nome  | Data Nascimento | Salário  | Função  ",
+                        "Maria | 18/10/2000      | 2.009,44 | Operador"
+                ),
+                logger.mensagem
+        );
     }
 
     @Test
@@ -80,8 +92,11 @@ class FuncionarioViewTest {
                 )
         )));
         assertEquals(
-                "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
-                        + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator(),
+                tabela(
+                        "Nome  | Data Nascimento | Salário  | Função  ",
+                        "Maria | 18/10/2000      | 2.009,44 | Operador",
+                        "João  | 12/05/1990      | 2.284,38 | Operador"
+                ),
                 logger.mensagem
         );
     }
@@ -103,8 +118,11 @@ class FuncionarioViewTest {
                 )
         )));
         assertEquals(
-                "Maria | 18/10/2000 | 2.210,38 | Operador" + System.lineSeparator()
-                        + "João | 12/05/1990 | 2.512,82 | Operador" + System.lineSeparator(),
+                tabela(
+                        "Nome  | Data Nascimento | Salário  | Função  ",
+                        "Maria | 18/10/2000      | 2.210,38 | Operador",
+                        "João  | 12/05/1990      | 2.512,82 | Operador"
+                ),
                 logger.mensagem
         );
     }
@@ -137,10 +155,16 @@ class FuncionarioViewTest {
         view.exibir(new ListarFuncionariosPorFuncao.Output(funcionariosPorFuncao));
         assertEquals(
                 "Operador" + System.lineSeparator()
-                        + "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
-                        + "João | 12/05/1990 | 2.284,38 | Operador" + System.lineSeparator()
+                        + tabela(
+                                "Nome  | Data Nascimento | Salário  | Função  ",
+                                "Maria | 18/10/2000      | 2.009,44 | Operador",
+                                "João  | 12/05/1990      | 2.284,38 | Operador"
+                        )
                         + "Coordenador" + System.lineSeparator()
-                        + "Caio | 02/05/1961 | 9.836,14 | Coordenador" + System.lineSeparator(),
+                        + tabela(
+                                "Nome | Data Nascimento | Salário  | Função     ",
+                                "Caio | 02/05/1961      | 9.836,14 | Coordenador"
+                        ),
                 logger.mensagem
         );
     }
@@ -162,8 +186,11 @@ class FuncionarioViewTest {
                 )
         )));
         assertEquals(
-                "Maria | 18/10/2000 | 2.009,44 | Operador" + System.lineSeparator()
-                        + "Miguel | 14/10/1988 | 19.119,88 | Diretor" + System.lineSeparator(),
+                tabela(
+                        "Nome   | Data Nascimento | Salário   | Função  ",
+                        "Maria  | 18/10/2000      | 2.009,44  | Operador",
+                        "Miguel | 14/10/1988      | 19.119,88 | Diretor "
+                ),
                 logger.mensagem
         );
     }
@@ -173,7 +200,13 @@ class FuncionarioViewTest {
         view.exibir(new ListarFuncionarioMaisVelho.Output(List.of(
                 new ListarFuncionarioMaisVelho.Output.Funcionario("Caio", 65)
         )));
-        assertEquals("Caio | 65" + System.lineSeparator(), logger.mensagem);
+        assertEquals(
+                tabela(
+                        "Nome | Idade",
+                        "Caio | 65   "
+                ),
+                logger.mensagem
+        );
     }
 
     @Test
@@ -183,8 +216,11 @@ class FuncionarioViewTest {
                 new ListarQuantidadeSalariosMinimos.Output.Funcionario("João", new BigDecimal("1.89"))
         )));
         assertEquals(
-                "Maria | 1,66" + System.lineSeparator()
-                        + "João | 1,89" + System.lineSeparator(),
+                tabela(
+                        "Nome  | Salários Mínimos",
+                        "Maria | 1,66            ",
+                        "João  | 1,89            "
+                ),
                 logger.mensagem
         );
     }
@@ -206,5 +242,14 @@ class FuncionarioViewTest {
         assertThrows(IllegalArgumentException.class, () -> view.toast(true, null));
         assertThrows(IllegalArgumentException.class, () -> view.toast(true, ""));
         assertThrows(IllegalArgumentException.class, () -> view.toast(true, " "));
+    }
+
+    private static String tabela(String... valores) {
+        StringBuffer saida = new StringBuffer();
+        for (String valor : valores) {
+            saida.append("| ").append(valor).append(" |").append(System.lineSeparator());
+        }
+        saida.append("-".repeat(valores[0].length() + "| ".length() + " |".length())).append(System.lineSeparator());
+        return saida.toString();
     }
 }
