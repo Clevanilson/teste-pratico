@@ -1,11 +1,5 @@
 # Teste Prático - Iniflex
 
-Tempo restante
-
-119:53:33
-
-Pergunta 1 de 1
-
 TESTE PRÁTICO PROGRAMAÇÃO.
 
 Considerando que uma indústria possui as pessoas/funcionários abaixo:
